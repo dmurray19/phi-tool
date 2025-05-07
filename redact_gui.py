@@ -194,12 +194,20 @@ class PHIRedactorApp:
                 cipher_suite = Fernet(key.encode())
                 decrypted = cipher_suite.decrypt(encrypted_phi.encode()).decode()
 
-                # build reidentification map from *label*|value format
+                # Build reidentification map from *label*|value format, including multiline continuation support
                 replacements = {}
+                last_tag = None
+
                 for line in decrypted.splitlines():
                     if "|" in line:
                         tag, value = line.split("|", 1)
-                        replacements[tag.strip()] = value.strip()   
+                        tag = tag.strip()
+                        value = value.strip()
+                        replacements[tag] = value
+                        last_tag = tag
+                    elif last_tag:
+                        # Continuation of multi-line PHI data
+                        replacements[last_tag] += f"\n{line.strip()}"
 
                 for tag, original in replacements.items():
                     content = content.replace(tag, original)

@@ -87,7 +87,7 @@ def redact_phi(input_file, output_file, exclude_options, custom_allergies):
         ("mrn", r'([Mm]edical [Rr]ecord [Nn]umber):\s*([\w-]+)', r'\1: *mrn*'),
         ("ssn", r'([Ss][Ss][Nn]|[Ss]ocial [Ss]ecurity [Nn]umber):\s([\d\*]{3}-[\d\*]{2}-\d{4})', r'\1: *ssn*'),
         ("address", r'([Aa]ddress:\s)([\w\s,]+,\s[A-Z]{2}\s\d{5})', r'\1*address*'),
-        ("fax", r'([Ff]ax [Nn]o\.?):\s*\(?\d{3}\)?[-\s]?\d{3}-\d{4}', r'\1: *fax*'),
+        ("fax", r'([Ff]ax [Nn]o\.?|[Ff]ax [Nn]umber):\s*(\(?\d{3}\)?[-\s]?\d{3}-\d{4})', r'\1: *fax*'),
         ("phone", r'\b\(?\d{3}\)?[-\s]?\d{3}-\d{4}\b', '*phone*'),
         ("email", r'\b[\w.-]+@[\w.-]+\.\w+\b', '*email*'),
         ("beneficiary", r'([Hh]ealth [Pp]lan [Bb]eneficiary [Nn]umber):\s*([\d-]+)', r'\1: *beneficiary*'),
