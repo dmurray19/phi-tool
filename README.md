@@ -64,10 +64,9 @@ python redact_gui.py
 ### Reidentifying a File
 
 1. Click **"Reidentify Record"**.
-2. Enter the **record ID**.
-3. Select the **deidentified `.txt` file**.
-4. The app will query the database, decrypt the PHI, and restore it in the file.
-5. Save the reidentified file to your desired location.
+2. Select the **deidentified `.txt` file**.
+3. The app will query the database, decrypt the PHI, and restore it in the file.
+4. Save the reidentified file to your desired location.
 
 ## Database Setup
 

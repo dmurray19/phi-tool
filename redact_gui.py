@@ -147,15 +147,37 @@ class PHIRedactorApp:
 
         tk.Button(popup, text="Browse", command=browse_file).pack(pady=2)
 
-        def perform_reidentify():
-            record_id = record_entry.get().strip()
-            file_path = selected_file.get().strip()
+    def open_reidentify_window(self):
+        popup = tk.Toplevel(self.master)
+        popup.title("Reidentify PHI Record")
 
-            if not record_id or not file_path or not os.path.exists(file_path):
-                messagebox.showerror("Error", "Please provide both Record ID and a valid file.")
+        tk.Label(popup, text="Select Deidentified File:").pack(pady=5)
+
+        selected_file = tk.StringVar()
+        file_entry = tk.Entry(popup, textvariable=selected_file, width=40)
+        file_entry.pack(pady=2)
+
+        def browse_file():
+            filepath = filedialog.askopenfilename(filetypes=[("Text files", "*.txt")])
+            if filepath:
+                selected_file.set(filepath)
+
+        tk.Button(popup, text="Browse", command=browse_file).pack(pady=2)
+
+        def perform_reidentify():
+            file_path = selected_file.get().strip()
+            if not file_path or not os.path.exists(file_path):
+                messagebox.showerror("Error", "Please select a valid deidentified file.")
                 return
 
             try:
+                with open(file_path, "r") as f:
+                    lines = f.readlines()
+                    if not lines:
+                        raise Exception("File is empty.")
+                    record_id = lines[0].strip()
+                    content = "".join(lines[1:])  # skip the record ID line
+
                 conn = mysql.connector.connect(**db_config)
                 cursor = conn.cursor()
                 cursor.execute("SELECT encryption_key, encrypted_phi FROM redacted_records WHERE record_id = %s", (record_id,))
@@ -177,11 +199,7 @@ class PHIRedactorApp:
                 for line in decrypted.splitlines():
                     if "|" in line:
                         tag, value = line.split("|", 1)
-                        replacements[tag.strip()] = value.strip()
-
-
-                with open(file_path, "r") as f:
-                    content = f.read()
+                        replacements[tag.strip()] = value.strip()   
 
                 for tag, original in replacements.items():
                     content = content.replace(tag, original)
