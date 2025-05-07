@@ -130,27 +130,6 @@ class PHIRedactorApp:
         popup = tk.Toplevel(self.master)
         popup.title("Reidentify PHI Record")
 
-        tk.Label(popup, text="Enter Record ID:").pack(pady=5)
-        record_entry = tk.Entry(popup, width=40)
-        record_entry.pack(pady=2)
-
-        tk.Label(popup, text="Select Deidentified File:").pack(pady=5)
-
-        selected_file = tk.StringVar()
-        file_entry = tk.Entry(popup, textvariable=selected_file, width=40)
-        file_entry.pack(pady=2)
-
-        def browse_file():
-            filepath = filedialog.askopenfilename(filetypes=[("Text files", "*.txt")])
-            if filepath:
-                selected_file.set(filepath)
-
-        tk.Button(popup, text="Browse", command=browse_file).pack(pady=2)
-
-    def open_reidentify_window(self):
-        popup = tk.Toplevel(self.master)
-        popup.title("Reidentify PHI Record")
-
         tk.Label(popup, text="Select Deidentified File:").pack(pady=5)
 
         selected_file = tk.StringVar()
