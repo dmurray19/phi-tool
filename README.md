@@ -35,6 +35,15 @@ project-folder/
 └── redact_phi.py
 ```
 
+## File Permissions
+
+Make both scripts executable on Unix-based systems:
+
+```bash
+chmod +x redact_gui.py
+chmod +x redact_phi.py
+```
+
 ## Usage
 
 Run the GUI:
@@ -65,11 +74,11 @@ python redact_gui.py
 Create a table in your MySQL database:
 
 ```sql
-CREATE TABLE redacted_records (
-    record_id VARCHAR(255) PRIMARY KEY,
-    encryption_key TEXT NOT NULL,
-    encrypted_phi TEXT NOT NULL
-);
+CREATE TABLE `mysqlphi`.`redacted_records` (
+  `record_id` VARCHAR(14) PRIMARY KEY,
+  `encryption_key` VARCHAR(255) NOT NULL,
+  `encrypted_phi` LONGTEXT NOT NULL,
+;
 ```
 
 Update the `db_config` section in `redact_gui.py` with your own MySQL credentials.
@@ -83,9 +92,18 @@ db_config = {
 }
 ```
 
+## Features
+
+- Upload and redact medical records via GUI
+- Choose PHI elements to omit using checkbox options
+- Add custom allergies for redaction
+- Download the redacted file
+- Reidentify a previously redacted file using stored record ID and encrypted PHI
+
 ## Notes
 
-- The application uses AES encryption via the `cryptography` package (Fernet) to secure PHI before storing it.
+- All removed PHI is encrypted using AES encryption via the `cryptography` module.
+- Reidentification requires the original record ID and access to the encrypted data in the database.
 - Temporary files are safely managed and cleaned up automatically.
 
 ## License
